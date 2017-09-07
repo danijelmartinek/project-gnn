@@ -1,5 +1,14 @@
+const express = require('express');
 
-console.log('hello')
-const express = require('express')
+const app = express();
 
-const app = express()
+app.set('port', process.env.PORT || 3000);
+
+
+app.get('/', function(req, res){
+  res.send("This is how I roll");
+});
+
+app.listen(app.get('port'), function(){
+  console.log("App running on the port " + app.get('port'));
+});

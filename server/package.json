@@ -1,6 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "private": true,
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,7 +9,7 @@
     "lint": "node node_modules/.bin/eslint **.*.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jan Capek",
   "license": "ISC",
   "dependencies": {
     "eslint": "^4.6.1",
