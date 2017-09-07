@@ -1,5 +1,5 @@
 const express = require('express');
-const mongo = require('mongodb');
+const mongo = require('mongodb').MongoClient;
 const strava = require('strava-v3')
 
 const app = express();
