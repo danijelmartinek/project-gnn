@@ -1,6 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "private": true,
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,11 +9,12 @@
     "lint": "node node_modules/.bin/eslint **.*.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jan Capek",
   "license": "ISC",
   "dependencies": {
     "eslint": "^4.6.1",
     "express": "^4.15.4",
-    "nodemon": "^1.12.0"
+    "nodemon": "^1.12.0",
+    "strava-v3": "^1.14.0"
   }
 }
