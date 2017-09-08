@@ -3,7 +3,7 @@
     <v-navigation-drawer temporary v-model="drawer" :mini-variant.sync="mini" light>
 
     </v-navigation-drawer>
-    <v-toolbar fixed class="deep-orange" dark>
+    <v-toolbar fixed class="blue" dark>
       <v-toolbar-side-icon dark @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>CARLESS</v-toolbar-title>
     </v-toolbar>
