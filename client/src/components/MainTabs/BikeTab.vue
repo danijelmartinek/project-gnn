@@ -27,7 +27,7 @@
                 <v-chip class="lime darken-1 white--text">1.</v-chip>
               </div>
               <div slot="header">
-                <v-chip class="transparent list-avatar-name">
+                <v-chip class="transparent">
                   <v-avatar>
                     <img src="https://randomuser.me/api/portraits/men/36.jpg" alt="pero">
                   </v-avatar>
@@ -40,7 +40,42 @@
                 </div>
               </div>
               <v-card>
-                <v-card-text class="grey lighten-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
+                <v-card-text class="grey lighten-3">
+                  <v-container grid-list-md text-xs-center>
+                    <v-layout row wrap>
+                      <v-flex xs3>
+                        <v-card light class="white">
+                          <v-card-text class="px-0">DNEVNA: 2 km</v-card-text>
+                        </v-card>
+                      </v-flex>
+                      <v-flex xs3>
+                        <v-card light class="white">
+                          <v-card-text class="px-0">TJEDNA: 2 km</v-card-text>
+                        </v-card>
+                      </v-flex>
+                      <v-flex xs3>
+                        <v-card light class="white">
+                          <v-card-text class="px-0">MJESEČNA: 2 km</v-card-text>
+                        </v-card>
+                      </v-flex>
+                      <v-flex xs3>
+                        <v-card light class="white">
+                          <v-card-text class="px-0">GODIŠNJA: 2 km</v-card-text>
+                        </v-card>
+                      </v-flex>
+                      <v-flex xs2 v-for="i in 6" :key="i">
+                        <v-card dark class="primary">
+                          <v-card-text class="px-0">2</v-card-text>
+                        </v-card>
+                      </v-flex>
+                      <v-flex xs1 v-for="i in 12" :key="i">
+                        <v-card dark class="secondary">
+                          <v-card-text class="px-0">1</v-card-text>
+                        </v-card>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-card-text>
               </v-card>
             </v-expansion-panel-content>
 
@@ -132,3 +167,5 @@
     }
   }
 </script>
+
+<style>

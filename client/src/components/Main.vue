@@ -16,13 +16,13 @@
             :id="'tab-1'"
           >
 
-          <BikeTab></BikeTab>
+          <TableViewBike></TableViewBike>
 
           </v-tabs-content>
           <v-tabs-content
             :id="'tab-2'"
           >
-          ewfewgrew
+          <TableViewFoot></TableViewFoot>
 
           </v-tabs-content>
         </v-tabs-items>
@@ -32,7 +32,8 @@
 </template>
 
 <script>
-import BikeTab from '@/components/MainTabs/BikeTab'
+import TableViewBike from '@/components/MainTabs/TableViewBike'
+import TableViewFoot from '@/components/MainTabs/TableViewFoot'
 
 export default {
   name: 'main',
@@ -40,7 +41,8 @@ export default {
 
   },
   components: {
-    BikeTab
+    TableViewBike,
+    TableViewFoot
   }
 }
 </script>
