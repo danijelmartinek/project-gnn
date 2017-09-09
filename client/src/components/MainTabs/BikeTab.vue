@@ -110,7 +110,7 @@
                   <v-avatar>
                     <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="pero">
                   </v-avatar>
-                  Živorad Kurčević
+                  Živorad Jurić
                 </v-chip>
               </div>
               <div slot="header">

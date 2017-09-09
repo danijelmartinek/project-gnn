@@ -1,13 +1,25 @@
 <template>
-  <div class="tableviewfoot">
+  <div class="tableviewbike">
     <v-container>
       <v-layout row wrap align-center justify-center>
         <v-flex xs6>
+          <v-card-title>
+            <span class="headline">Poredak</span>
+            <v-spacer></v-spacer>
+            <v-text-field
+              append-icon="search"
+              label="Search"
+              single-line
+              hide-details
+              v-model="search"
+            ></v-text-field>
+          </v-card-title>
           <v-data-table
             v-bind:headers="headers"
             :items="items"
             hide-actions
             class="elevation-1"
+            v-bind:search="search"
           >
           <template slot="items" scope="props">
             <td>{{ props.item.rank }}</td>
@@ -23,9 +35,10 @@
 
 <script>
   export default {
-    name: 'TableViewFoot',
+    name: 'TableViewBike',
     data () {
       return {
+        search: '',
         headers: [
           {
             text: 'Rank',
@@ -48,8 +61,8 @@
             value: false,
             rank: 1,
             imeiprezime: 'Pero Perić',
-            tjedno: 12,
-            mjesecno: 41
+            tjedno: 35,
+            mjesecno: 125
           },
           {
             value: false,
