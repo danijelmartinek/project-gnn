@@ -1,5 +1,5 @@
 <template>
-  <div class="tableviewbike">
+  <div class="tableviewfoot">
     <v-container>
       <v-layout row wrap align-center justify-center>
         <v-flex xs6>
@@ -35,7 +35,7 @@
 
 <script>
   export default {
-    name: 'TableViewBike',
+    name: 'tableviewfoot',
     data () {
       return {
         search: '',
@@ -104,5 +104,3 @@
     }
   }
 </script>
-
-<style>

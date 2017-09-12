@@ -154,7 +154,7 @@
 
 <script>
   export default {
-    name: 'BikeTab',
+    name: 'biketab',
     data () {
       return {
         text: 'center',

@@ -17,6 +17,8 @@
           <v-data-table
             v-bind:headers="headers"
             :items="items"
+            v-bind:pagination.sync="pagination"
+            rows-per-page-items = "9"
             hide-actions
             class="elevation-1"
             v-bind:search="search"
@@ -27,6 +29,9 @@
             <td class="text-xs-center">{{ props.item.mjesecno }}</td>
           </template>
         </v-data-table>
+        <div class="text-xs-center pt-2">
+          <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
+        </div>
         </v-flex>
       </v-layout>
     </v-container>
@@ -35,10 +40,11 @@
 
 <script>
   export default {
-    name: 'TableViewBike',
+    name: 'tableviewbike',
     data () {
       return {
         search: '',
+        pagination: {},
         headers: [
           {
             text: 'Rank',
@@ -98,11 +104,84 @@
             imeiprezime: 'Dragomir Adamić',
             tjedno: 19,
             mjesecno: 50
+          },
+          {
+            value: false,
+            rank: 7,
+            imeiprezime: 'Silvio Ilić',
+            tjedno: 32,
+            mjesecno: 115
+          },
+          {
+            value: false,
+            rank: 8,
+            imeiprezime: 'Ervin Kovac',
+            tjedno: 30,
+            mjesecno: 105
+          },
+          {
+            value: false,
+            rank: 9,
+            imeiprezime: 'Davorin Jurić',
+            tjedno: 26,
+            mjesecno: 89
+          },
+          {
+            value: false,
+            rank: 10,
+            imeiprezime: 'David Marković',
+            tjedno: 22,
+            mjesecno: 74
+          },
+          {
+            value: false,
+            rank: 11,
+            imeiprezime: 'Dragomir Adamić',
+            tjedno: 19,
+            mjesecno: 50
+          },
+          {
+            value: false,
+            rank: 12,
+            imeiprezime: 'Silvio Ilić',
+            tjedno: 32,
+            mjesecno: 115
+          },
+          {
+            value: false,
+            rank: 13,
+            imeiprezime: 'Ervin Kovac',
+            tjedno: 30,
+            mjesecno: 105
+          },
+          {
+            value: false,
+            rank: 14,
+            imeiprezime: 'Davorin Jurić',
+            tjedno: 26,
+            mjesecno: 89
+          },
+          {
+            value: false,
+            rank: 15,
+            imeiprezime: 'David Marković',
+            tjedno: 22,
+            mjesecno: 74
+          },
+          {
+            value: false,
+            rank: 16,
+            imeiprezime: 'Dragomir Adamić',
+            tjedno: 19,
+            mjesecno: 50
           }
         ]
+      }
+    },
+    computed: {
+      pages () {
+        return this.pagination.rowsPerPage ? Math.ceil(this.items.length / this.pagination.rowsPerPage) : 0
       }
     }
   }
 </script>
-
-<style>

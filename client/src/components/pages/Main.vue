@@ -22,6 +22,7 @@
           <v-tabs-content
             :id="'tab-2'"
           >
+          
           <TableViewFoot></TableViewFoot>
 
           </v-tabs-content>
@@ -37,12 +38,15 @@ import TableViewFoot from '@/components/MainTabs/TableViewFoot'
 
 export default {
   name: 'main',
-  data () {
-
-  },
   components: {
     TableViewBike,
     TableViewFoot
   }
 }
 </script>
+
+<style>
+  .main{
+    margin-top: 60px;
+  }
+</style>
