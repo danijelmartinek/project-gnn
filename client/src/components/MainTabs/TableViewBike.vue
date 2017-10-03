@@ -94,86 +94,86 @@
           {
             value: false,
             rank: 5,
-            imeiprezime: 'David Marković',
+            imeiprezime: 'Hana Đurađa',
             tjedno: 22,
             mjesecno: 74
           },
           {
             value: false,
             rank: 6,
-            imeiprezime: 'Dragomir Adamić',
+            imeiprezime: 'Doris Nela',
             tjedno: 19,
             mjesecno: 50
           },
           {
             value: false,
             rank: 7,
-            imeiprezime: 'Silvio Ilić',
+            imeiprezime: 'Branko Vitomir',
             tjedno: 32,
-            mjesecno: 115
+            mjesecno: 48
           },
           {
             value: false,
             rank: 8,
-            imeiprezime: 'Ervin Kovac',
+            imeiprezime: 'Boško Ljuban',
             tjedno: 30,
-            mjesecno: 105
+            mjesecno: 44
           },
           {
             value: false,
             rank: 9,
-            imeiprezime: 'Davorin Jurić',
+            imeiprezime: 'Anton Dušan',
             tjedno: 26,
-            mjesecno: 89
+            mjesecno: 37
           },
           {
             value: false,
             rank: 10,
-            imeiprezime: 'David Marković',
+            imeiprezime: 'Mile Čedomir',
             tjedno: 22,
-            mjesecno: 74
+            mjesecno: 30
           },
           {
             value: false,
             rank: 11,
-            imeiprezime: 'Dragomir Adamić',
+            imeiprezime: 'Marijo Miloš',
             tjedno: 19,
-            mjesecno: 50
+            mjesecno: 28
           },
           {
             value: false,
             rank: 12,
-            imeiprezime: 'Silvio Ilić',
+            imeiprezime: 'Vlaho Vilim',
             tjedno: 32,
-            mjesecno: 115
+            mjesecno: 25
           },
           {
             value: false,
             rank: 13,
-            imeiprezime: 'Ervin Kovac',
+            imeiprezime: 'Vanja Pavo',
             tjedno: 30,
-            mjesecno: 105
+            mjesecno: 18
           },
           {
             value: false,
             rank: 14,
-            imeiprezime: 'Davorin Jurić',
+            imeiprezime: 'Krešo Damir',
             tjedno: 26,
-            mjesecno: 89
+            mjesecno: 17
           },
           {
             value: false,
             rank: 15,
             imeiprezime: 'David Marković',
             tjedno: 22,
-            mjesecno: 74
+            mjesecno: 10
           },
           {
             value: false,
             rank: 16,
             imeiprezime: 'Dragomir Adamić',
             tjedno: 19,
-            mjesecno: 50
+            mjesecno: 0
           }
         ]
       }

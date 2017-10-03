@@ -22,7 +22,7 @@
           <v-tabs-content
             :id="'tab-2'"
           >
-          
+
           <TableViewFoot></TableViewFoot>
 
           </v-tabs-content>

@@ -1,20 +1,23 @@
 {
-  "name": "server",
+  "name": "fckingstrava",
   "version": "1.0.0",
   "private": true,
-  "description": "",
-  "main": "index.js",
+  "description": "strava lookup",
+  "main": "app.js",
   "scripts": {
-    "start": "node node_modules/nodemon/bin/nodemon.js src/app.js --exec",
-    "lint": "node node_modules/.bin/eslint **.*.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
   "author": "Jan Capek",
   "license": "ISC",
   "dependencies": {
-    "eslint": "^4.6.1",
+    "body-parser": "^1.18.1",
+    "cookie-parser": "^1.4.3",
     "express": "^4.15.4",
-    "nodemon": "^1.12.0",
+    "express-session": "^1.15.5",
+    "mongoose": "^4.11.11",
+    "morgan": "^1.8.2",
+    "passport": "^0.4.0",
+    "passport-strava-oauth2": "^0.1.3",
     "strava-v3": "^1.14.0"
   }
 }
