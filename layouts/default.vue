@@ -3,9 +3,7 @@
     <myHeader/>
     <main>
       <v-content>
-        <v-container fluid>
-          <nuxt/>
-        </v-container>
+        <nuxt/>
       </v-content>
     </main>
     <myFooter/>
@@ -13,8 +11,8 @@
 </template>
 
 <script>
-import myHeader from '~/components/Header.vue'
-import myFooter from '~/components/Footer.vue'
+import myHeader from '~/components/core/Header.vue'
+import myFooter from '~/components/core/Footer.vue'
 
 export default {
   components: {
