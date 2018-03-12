@@ -14,9 +14,7 @@ var server = express();
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || '3000'
 
-mongoose.connect(configDB.url, () => {
-  console.log("Connection to db established!");
-});
+mongoose.connect(configDB.url, () => {});
 
 // For serving static files from public directory
 // server.use(express.static('public'));

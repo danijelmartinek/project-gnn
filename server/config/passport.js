@@ -27,11 +27,10 @@ module.exports = function(passport){
 					return done(err);
 				}
 				if(user){
-					console.log("User " + profile._json.firstname + " " + profile._json.lastname + " found in database.");
 					return done(null, user);
 				}
 				else{
-					console.log("User "  + profile._json.firstname + " " + profile._json.lastname + " saved to database.");
+					console.log("User " + profile._json.firstname + " " + profile._json.lastname + " saved to database.");
 					var newUser = new User();
 					newUser.strava.id = profile._json.id;
 					newUser.strava.token = profile.token;
@@ -43,8 +42,9 @@ module.exports = function(passport){
 					newUser.state = profile._json.state;
 					newUser.profilePic = profile._json.profile;
 					newUser.userBio = null;
-					// newUser.created_at = Date.now();
-					// newUser.updated_at = Date.now();
+					newUser.groupId = null;
+					newUser.created_at = Date.now();
+					newUser.updated_at = Date.now();
 					
 					newUser.save((err) => {
 						if(err)

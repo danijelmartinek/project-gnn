@@ -11,8 +11,12 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
+      { rel: 'stylesheet', type: 'text/css', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' },
+      { rel: 'preconnect', href: 'https://www.strava.com/login' }
     ]
+  },
+  router: {
+    base: "/"
   },
   /*
   ** Global CSS
@@ -22,27 +26,28 @@ module.exports = {
   ** Add axios globally
   */
   build: {
-    vendor: ['axios'],
-    vendor: ['vuetify'],
+    vendor: ['axios','vuetify','vue-table-component'],
     extractCSS: true,
     /*
     ** Run ESLINT on save
     */
     extend (config, ctx) {
-      if (ctx.isClient) {
+       if (ctx.isClient) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/
         })
-      }
+      } 
     }
   },
-    /*
-  ** Load Vuetify into the app
-  */
-  plugins: ['~/plugins/vuetify'],
+
+  plugins: [
+      {src: '~plugins/vuetify'},
+      {src: '~plugins/tableComponent.js', ssr: false},
+      {src: '~plugins/tabsComponent.js', ssr: false}
+      ],
   /*
   ** Load Vuetify CSS globally
   */

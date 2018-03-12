@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 // user Schema
+mongoose.Promise = global.Promise;
 var userSchema = new mongoose.Schema({
   strava:{
     id: String,
@@ -14,6 +15,7 @@ var userSchema = new mongoose.Schema({
   state: String,
   profilePic: String,
   userBio: String,
+  groupId: String,
   created_at: Date,
   updated_at: Date
 });

@@ -1,6 +1,6 @@
 <template>
-  <v-container class="margin-top-250" fluid>
-    <v-layout row>
+  <v-container class="pa-0" fluid>
+    <v-layout row wrap>
       <v-flex class="profile_body" xs12 sm12 md12 lg12 xl12>
           <div class="cover_image"><div class="cover_image_gradient"></div></div>
       </v-flex>

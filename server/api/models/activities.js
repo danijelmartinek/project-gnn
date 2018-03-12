@@ -1,16 +1,19 @@
 const mongoose = require('mongoose');
 
+// activity Schema
+mongoose.Promise = global.Promise;
 var activitySchema = new mongoose.Schema({
-    id: String,
-    user_id: String,
+    userId: String,
     type: String,
     distance: Number,
-    end_point: Array,
+    duration: Number,
+    endPoint: Array,
     map: {
         id: String,
         polyline: String,
-        summary_polyline: String
-    }
+        summaryPolyline: String
+    },
+    created_at: Date
 });
 
 module.exports = mongoose.model('Activity', activitySchema);

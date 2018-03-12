@@ -1,0 +1,120 @@
+var User = require('../api/models/user.js');
+var Activity = require('../api/models/activities.js');
+
+
+module.exports = function(server, passport){
+    
+  server.get('/auth/strava', passport.authenticate('strava'));
+
+  server.get('/auth/strava/callback', passport.authenticate('strava', {
+    failureRedirect: 'http://localhost:3000',
+    successRedirect: 'http://localhost:3000',
+    failureFlash: true
+  }));
+
+  server.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+  })
+
+
+    server.get('/api/carlessDB/logactivity', function (req, res) {
+      console.log("Activity saved to database.");
+          var newActivity = new Activity();
+					newActivity.userId = '59f36aafbd536c07fc4ee674';
+					newActivity.type = "Ride";
+					newActivity.distance = 56000;
+					newActivity.created_at = new Date();
+					
+					newActivity.save((err) => {
+						if(err)
+							throw err;
+					});	
+  });
+
+
+
+
+
+
+
+      function dailySort() {
+        var dailyDataContructor = function (userId, userFirstName, userLastName, dayDistance) {
+          this.userId = userId;
+          this.userFirstName = userFirstName;
+          this.userLastName = userLastName;
+          this.dayDistance = dayDistance;
+        }
+        
+        var activityMap = [];
+        var dailyData =[];
+
+        //filtriranje aktivnosti po trenutnom danu
+        var now = new Date();
+        var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        Activity.find({"created_at": {$gte: startOfToday}}, function (err, activity) {
+          activity.forEach(function(activity) {
+            activityMap.push(activity);
+          });
+        });
+
+        activityMap.forEach(function(activity) {
+          
+          //provjera postoji li aktivnost po user-u
+          var userId = this.userId
+          dailyData.count({userId: userId}, function (err, count){ 
+            if(count>0){
+              dailyData.findOneAndUpdate({"userID": userId},
+              {
+                $set: {
+                     "dailyData.$.dayDistance": "dailyData.$.dayDistance" + this.distance
+                 }
+              },
+              { new: true } // update aktivnosti
+             ).exec(function(error, post) {
+                 if(error) {
+                     return res.status(400).send({msg: 'Update failed!'});
+                 }
+     
+                 return res.status(200).send(post);
+             });
+            }
+            else{
+              dailyData.push(new dailyDataContructor(
+                this.userId, 
+                User.find({_id: userId}, function(err, user){
+                  return firstName;
+                }), 
+                User.find({_id: userId}, function(err, user){
+                  return lastName;
+                }),
+                this.distance
+              ));
+            }
+          }); 
+        });
+
+        console.log(activityMap);
+      }
+
+
+      var userMap = [];
+      server.get('/api/carlessDB/user', function (req, res) {
+        User.find({}, function(err, user){
+          user.forEach(function(user) {
+            userMap.push(user);
+          });
+          res.contentType('application/json');
+          res.setHeader("Access-Control-Allow-Origin", "*");
+          res.send(userMap);
+        });
+      });
+
+
+      server.get('/api/carlessDB/activities', function (req, res) {
+        dailySort();
+      });
+
+
+
+}
