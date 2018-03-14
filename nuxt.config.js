@@ -1,4 +1,9 @@
 module.exports = {
+
+  serverMiddleware: [
+      // Will register file from project api directory to handle /api/* requires
+      // { path: '/', handler: '~/server/api/logger.js' },
+  ],
   /*
   ** Headers of the page
   */
@@ -44,9 +49,7 @@ module.exports = {
   },
 
   plugins: [
-      {src: '~plugins/vuetify'},
-      {src: '~plugins/tableComponent.js', ssr: false},
-      {src: '~plugins/tabsComponent.js', ssr: false}
+      {src: '~plugins/vuetify'}
       ],
   /*
   ** Load Vuetify CSS globally

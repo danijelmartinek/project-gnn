@@ -73,7 +73,6 @@
 </template>
 
 <script>
-/*eslint-disable*/
 import mainTab1 from '~/components/pages/main/mainTab1.vue'
 import mainTab2 from '~/components/pages/main/mainTab2.vue'
 import mainTab3 from '~/components/pages/main/mainTab3.vue'
@@ -81,10 +80,10 @@ import mainTab4 from '~/components/pages/main/mainTab4.vue'
 
 export default {
   components: {
-  mainTab1,
-  mainTab2,
-  mainTab3,
-  mainTab4
+    mainTab1,
+    mainTab2,
+    mainTab3,
+    mainTab4
   },
   data: () => ({
     currentItem: 'day-view'

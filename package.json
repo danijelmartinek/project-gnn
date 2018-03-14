@@ -26,8 +26,6 @@
     "passport-strava": "latest",
     "qs": "^6.5.1",
     "source-map-support": "^0.4.15",
-    "vue-table-component": "^1.9.0",
-    "vue-tabs-component": "^1.4.0",
     "vuetify": "^1.0.3"
   },
   "devDependencies": {

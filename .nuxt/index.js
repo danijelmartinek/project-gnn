@@ -13,8 +13,6 @@ import { createStore } from './store.js'
 
 /* Plugins */
 import nuxt_plugin_vuetify_0e1f10d7 from 'nuxt_plugin_vuetify_0e1f10d7' // Source: ../plugins/vuetify
-import nuxt_plugin_tableComponent_22fce85e from 'nuxt_plugin_tableComponent_22fce85e' // Source: ../plugins/tableComponent.js (ssr: false)
-import nuxt_plugin_tabsComponent_79171762 from 'nuxt_plugin_tabsComponent_79171762' // Source: ../plugins/tabsComponent.js (ssr: false)
 
 
 // Component: <no-ssr>
@@ -155,10 +153,6 @@ async function createApp (ssrContext) {
   
   if (typeof nuxt_plugin_vuetify_0e1f10d7 === 'function') await nuxt_plugin_vuetify_0e1f10d7(app.context, inject)
   
-  if (process.browser) { 
-    if (typeof nuxt_plugin_tableComponent_22fce85e === 'function') await nuxt_plugin_tableComponent_22fce85e(app.context, inject)
-    if (typeof nuxt_plugin_tabsComponent_79171762 === 'function') await nuxt_plugin_tabsComponent_79171762(app.context, inject)
-  }
 
   // If server-side, wait for async component to be resolved first
   if (process.server && ssrContext && ssrContext.url) {

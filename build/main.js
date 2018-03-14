@@ -145,7 +145,7 @@ __webpack_require__(11)(passport);
 __webpack_require__(13)(server, passport);
 
 // Import and Set Nuxt.js options
-var config = __webpack_require__(17);
+var config = __webpack_require__(20);
 config.dev = !("development" === 'production');
 
 // Init Nuxt.js
@@ -284,13 +284,9 @@ module.exports = {
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 var User = __webpack_require__(2);
 var Activity = __webpack_require__(14);
 var ActivityGroups = __webpack_require__(15);
-
-var data = __webpack_require__(16);
 
 module.exports = function (server, passport) {
 
@@ -305,10 +301,6 @@ module.exports = function (server, passport) {
   server.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
-  });
-
-  server.get('/data', function (req, res) {
-    res.send(data);
   });
 
   var groupMap = [];
@@ -342,7 +334,7 @@ module.exports = function (server, passport) {
       User.findByIdAndUpdate(req.body._id, { $set: {
           userBio: req.body.userBio,
           groupId: req.body.groupId,
-          //  profilePic: req.body.profilePic,
+          profilePic: req.body.profilePic,
           state: req.body.state,
           city: req.body.city,
           email: req.body.email,
@@ -360,7 +352,7 @@ module.exports = function (server, passport) {
             User.findByIdAndUpdate(req.body[key]._id, { $set: {
                 userBio: req.body[key].userBio,
                 groupId: req.body[key].groupId,
-                //  profilePic: req.body[key].profilePic,
+                profilePic: req.body[key].profilePic,
                 state: req.body[key].state,
                 city: req.body[key].city,
                 email: req.body[key].email,
@@ -377,109 +369,180 @@ module.exports = function (server, passport) {
     }
   });
 
-  server.get('/api/carlessDB/logactivity1', function (req, res) {
-    console.log("Activity saved to database.");
-    var newActivity = new Activity();
-    newActivity.userId = '5a9534ab137aae52ecd2fdc9';
-    newActivity.type = "Ride";
-    newActivity.distance = 4250;
-    newActivity.created_at = new Date();
+  // server.get('/api/carlessDB/logactivity1', function (req, res) {
+  //   console.log("Activity saved to database.");
+  //       var newActivity = new Activity();
+  //       newActivity.userId = '5a9534ab137aae52ecd2fdc9';
+  //       newActivity.type = "Ride";
+  //       newActivity.distance = 4250;
+  //       newActivity.created_at = new Date();
 
-    newActivity.save(function (err) {
-      if (err) throw err;
-    });
-  });
+  //       newActivity.save((err) => {
+  //         if(err)
+  //           throw err;
+  //       });	
+  // });
 
-  server.get('/api/activities/dailydata', function (req, res, next) {
-    var dailyDataConstructor = function dailyDataConstructor(userId, userFirstName, userLastName, dayDistance) {
-      this.userId = userId;
-      this.userFirstName = userFirstName;
-      this.userLastName = userLastName;
-      this.dayDistance = dayDistance;
-    };
 
-    var activityMap = [];
-    var userMap = [];
+  __webpack_require__(16)(server, User, Activity, ActivityGroups);
 
-    var dailyData = [];
+  __webpack_require__(17)(server, User, Activity, ActivityGroups);
 
-    forEachCount = 0;
+  __webpack_require__(18)(server, User, Activity, ActivityGroups);
 
-    var BreakSignal = function BreakSignal() {
-      _classCallCheck(this, BreakSignal);
-    };
+  __webpack_require__(19)(server, User, Activity, ActivityGroups);
+};
 
-    ;
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
 
-    //filtriranje aktivnosti po trenutnom danu
-    var now = new Date();
+var mongoose = __webpack_require__(0);
 
-    var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+// activity Schema
+mongoose.Promise = global.Promise;
+var activitySchema = new mongoose.Schema({
+    userId: String,
+    type: String,
+    distance: Number,
+    duration: Number,
+    endPoint: Array,
+    map: {
+        id: String,
+        polyline: String,
+        summaryPolyline: String
+    },
+    created_at: Date
+});
 
-    Activity.find({ "created_at": { $gte: startOfToday }
+module.exports = mongoose.model('Activity', activitySchema);
 
-    }).then(function (activity) {
-      if (activity[0] == null) {
-        userMap.push('noData');
-        res.send(userMap);
-        throw new BreakSignal();
-      } else {
-        activity.forEach(function (activity) {
-          activityMap.push(activity);
-        });
-        return activityMap;
-      }
-    }).then(function (activityMap) {
-      activityMap.forEach(function (activity) {
-        var userId = activity.userId;
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
 
-        User.find().then(function (users) {
-          users.forEach(function (user) {
-            userMap.push(user);
-          });
-          return userMap;
-        }).then(function (userMap) {
-          var found = false;
-          for (var i = 0; i < dailyData.length; i++) {
-            if (dailyData[i].userId === userId) {
-              found = true;
-              break;
-            }
-          }
-          if (found == true) {
-            userIndex = dailyData.findIndex(function (obj) {
-              return obj.userId === userId;
-            });
-            dailyData[userIndex].dayDistance = dailyData[userIndex].dayDistance + activity.distance;
-          } else {
+var mongoose = __webpack_require__(0);
 
-            var user = userMap.find(function (o) {
-              return o.id === userId;
-            });
+// group Schema
+mongoose.Promise = global.Promise;
+var groupSchema = new mongoose.Schema({
+  adminMail: String,
+  groupName: String,
+  groupDescription: String,
+  created_at: Date,
+  updated_at: Date
+});
 
-            if (user.groupId === req.user.groupId) {
-              var activityData = new dailyDataConstructor(activity.userId, user.firstName, user.lastName, activity.distance);
+// make this available to our users in our Node applications
+module.exports = mongoose.model('Group', groupSchema);
 
-              activityData = JSON.stringify(activityData);
-              activityData = JSON.parse(activityData);
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
 
-              dailyData.push(activityData);
-            }
-          }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-          if (activityMap[forEachCount + 1] == null) {
-            if (typeof dailyData !== 'undefined' && dailyData.length > 0) {
-              res.send(dailyData);
+module.exports = function (server, User, Activity, ActivityGroups) {
+
+    server.get('/api/activities/dailydata', function (req, res, next) {
+        var dailyDataConstructor = function dailyDataConstructor(userId, userFirstName, userLastName, dayDistance) {
+            this.userId = userId;
+            this.userFirstName = userFirstName;
+            this.userLastName = userLastName;
+            this.dayDistance = dayDistance;
+        };
+
+        var activityMap = [];
+        var userMap = [];
+
+        var dailyData = [];
+
+        forEachCount = 0;
+
+        var BreakSignal = function BreakSignal() {
+            _classCallCheck(this, BreakSignal);
+        };
+
+        ;
+
+        //filtriranje aktivnosti po trenutnom danu
+        var now = new Date();
+
+        var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+        Activity.find({ "created_at": { $gte: startOfToday }
+
+        }).then(function (activity) {
+            if (activity[0] == null) {
+                userMap.push('noData');
+                res.send(userMap);
+                throw new BreakSignal();
             } else {
-              dailyData.push('noData');
-              res.send(dailyData);
+                activity.forEach(function (activity) {
+                    activityMap.push(activity);
+                });
+                return activityMap;
             }
-          }
-          forEachCount++;
-        });
-      });
-    }).catch(BreakSignal, function () {});
-  });
+        }).then(function (activityMap) {
+            activityMap.forEach(function (activity) {
+                var userId = activity.userId;
+
+                User.find().then(function (users) {
+                    users.forEach(function (user) {
+                        userMap.push(user);
+                    });
+                    return userMap;
+                }).then(function (userMap) {
+                    var found = false;
+                    for (var i = 0; i < dailyData.length; i++) {
+                        if (dailyData[i].userId === userId) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found == true) {
+                        userIndex = dailyData.findIndex(function (obj) {
+                            return obj.userId === userId;
+                        });
+                        dailyData[userIndex].dayDistance = dailyData[userIndex].dayDistance + activity.distance;
+                    } else {
+
+                        var user = userMap.find(function (o) {
+                            return o.id === userId;
+                        });
+
+                        if (user.groupId === req.user.groupId) {
+                            var activityData = new dailyDataConstructor(activity.userId, user.firstName, user.lastName, activity.distance);
+
+                            activityData = JSON.stringify(activityData);
+                            activityData = JSON.parse(activityData);
+
+                            dailyData.push(activityData);
+                        }
+                    }
+
+                    if (activityMap[forEachCount + 1] == null) {
+                        if (typeof dailyData !== 'undefined' && dailyData.length > 0) {
+                            res.send(dailyData);
+                        } else {
+                            dailyData.push('noData');
+                            res.send(dailyData);
+                        }
+                    }
+                    forEachCount++;
+                });
+            });
+        }).catch(BreakSignal, function () {});
+    });
+};
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+module.exports = function (server, User, Activity, ActivityGroups) {
 
   server.get('/api/activities/weeklydata', function (req, res, next) {
     var weeklyDataConstructor = function weeklyDataConstructor(userId, userFirstName, userLastName, weekDistance) {
@@ -577,6 +640,15 @@ module.exports = function (server, passport) {
       });
     }).catch(BreakSignal, function () {});
   });
+};
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+module.exports = function (server, User, Activity, ActivityGroups) {
 
   server.get('/api/activities/monthlydata', function (req, res, next) {
     var monthlyDataConstructor = function monthlyDataConstructor(userId, userFirstName, userLastName, monthDistance) {
@@ -667,6 +739,15 @@ module.exports = function (server, passport) {
       });
     }).catch(BreakSignal, function () {});
   });
+};
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+module.exports = function (server, User, Activity, ActivityGroups) {
 
   server.get('/api/activities/yearlydata', function (req, res, next) {
     var yearlyDataConstructor = function yearlyDataConstructor(userId, userFirstName, userLastName, yearDistance) {
@@ -760,61 +841,17 @@ module.exports = function (server, passport) {
 };
 
 /***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var mongoose = __webpack_require__(0);
-
-// activity Schema
-mongoose.Promise = global.Promise;
-var activitySchema = new mongoose.Schema({
-    userId: String,
-    type: String,
-    distance: Number,
-    duration: Number,
-    endPoint: Array,
-    map: {
-        id: String,
-        polyline: String,
-        summaryPolyline: String
-    },
-    created_at: Date
-});
-
-module.exports = mongoose.model('Activity', activitySchema);
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var mongoose = __webpack_require__(0);
-
-// group Schema
-mongoose.Promise = global.Promise;
-var groupSchema = new mongoose.Schema({
-  adminMail: String,
-  groupName: String,
-  groupDescription: String,
-  created_at: Date,
-  updated_at: Date
-});
-
-// make this available to our users in our Node applications
-module.exports = mongoose.model('Group', groupSchema);
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-module.exports = [{"id":"35342643","userFirstName":"Danijel","userLastName":"Martinek","dayDistance":"180"},{"id":"53455354","userFirstName":"Denis Martin","userLastName":"Budinski","dayDistance":"520"},{"id":"73204750","userFirstName":"Mario","userLastName":"Martinek","dayDistance":"80"},{"id":"35342643","userFirstName":"Danijel","userLastName":"Martinek","dayDistance":"280"},{"id":"53455354","userFirstName":"Denis Martin","userLastName":"Budinski","dayDistance":"320"},{"id":"73204750","userFirstName":"Mario","userLastName":"Martinek","dayDistance":"65"},{"id":"35342643","userFirstName":"Danijel","userLastName":"Martinek","dayDistance":"110"},{"id":"53455354","userFirstName":"Denis Martin","userLastName":"Budinski","dayDistance":"330"},{"id":"73204750","userFirstName":"Mario","userLastName":"Martinek","dayDistance":"330"},{"id":"35342643","userFirstName":"Danijel","userLastName":"Martinek","dayDistance":"180"},{"id":"53455354","userFirstName":"Denis Martin","userLastName":"Budinski","dayDistance":"520"},{"id":"73204750","userFirstName":"Mario","userLastName":"Martinek","dayDistance":"80"},{"id":"35342643","userFirstName":"Danijel","userLastName":"Martinek","dayDistance":"280"},{"id":"53455354","userFirstName":"Denis Martin","userLastName":"Budinski","dayDistance":"320"},{"id":"73204750","userFirstName":"Mario","userLastName":"Martinek","dayDistance":"65"},{"id":"35342643","userFirstName":"Danijel","userLastName":"Martinek","dayDistance":"110"},{"id":"53455354","userFirstName":"Denis Martin","userLastName":"Budinski","dayDistance":"330"},{"id":"73204750","userFirstName":"Mario","userLastName":"Martinek","dayDistance":"330"}]
-
-/***/ }),
-/* 17 */
+/* 20 */
 /***/ (function(module, exports) {
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 module.exports = _defineProperty({
+
+  serverMiddleware: [
+    // Will register file from project api directory to handle /api/* requires
+    // { path: '/', handler: '~/server/api/logger.js' },
+  ],
   /*
   ** Headers of the page
   */
@@ -851,7 +888,7 @@ module.exports = _defineProperty({
     }
   },
 
-  plugins: [{ src: '~plugins/vuetify' }, { src: '~plugins/tableComponent.js', ssr: false }, { src: '~plugins/tabsComponent.js', ssr: false }]
+  plugins: [{ src: '~plugins/vuetify' }]
 }, 'css', ['~/assets/css/app.styl']);
 
 /***/ })
