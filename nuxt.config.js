@@ -1,3 +1,5 @@
+/*eslint-disable*/
+
 module.exports = {
 
   serverMiddleware: [
@@ -31,12 +33,13 @@ module.exports = {
   ** Add axios globally
   */
   build: {
-    vendor: ['axios','vuetify','vue-table-component'],
+    vendor: ['axios','vuetify'],
     extractCSS: true,
     /*
     ** Run ESLINT on save
     */
     extend (config, ctx) {
+
        if (ctx.isClient) {
         config.module.rules.push({
           enforce: 'pre',
@@ -44,12 +47,27 @@ module.exports = {
           loader: 'eslint-loader',
           exclude: /(node_modules)/
         })
-      } 
+      }
+
+      if (!ctx.isClient) {
+        // This instructs Webpack to include `vue2-google-maps`'s Vue files
+        // for server-side rendering
+        config.externals.splice(0, 0, function (context, request, callback) {
+          if (/^vue2-google-maps($|\/)/.test(request)) {
+            callback(null, false)
+          } else {
+            callback()
+          }
+        })
+      }
+
     }
   },
 
   plugins: [
-      {src: '~plugins/vuetify'}
+      {src: '~plugins/vuetify'},
+      {src: '~plugins/googleMaps'},
+      {src: '~plugins/croppa'}
       ],
   /*
   ** Load Vuetify CSS globally

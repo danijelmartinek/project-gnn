@@ -1,390 +1,244 @@
 <template>
-  <div>
-    <div v-if="!$store.state.authUser">
-      <h1 style="padding: 100px;">Molimo ulogirajte se</h1>
-    </div>
-    <div v-else-if="!$store.state.authUser.groupId">
-      <h1 style="padding: 100px;">Nemate dodjeljenu grupu</h1>
-    </div>
-    <div v-else>
-      <v-toolbar color="white" light tabs>
-        <v-tabs
-          fixed-tabs
-          v-model="currentItem"
-          color="transparent"
-          slider-color="yellow"
-          slot="extension"
-        >
-          <v-tab :href="'#day-view'">
-          Dnevno
-          </v-tab>
-          <v-tab :href="'#week-view'">
-            Tjedno
-          </v-tab>
-          <v-tab :href="'#month-view'">
-            Mjesečno
-          </v-tab>
-          <v-tab :href="'#year-view'">
-            Godišnje
-          </v-tab>
-        </v-tabs>
-      </v-toolbar>
-
-      <v-tabs-items v-model="currentItem" :touchless="true">
-        <v-tab-item id="day-view">
-          <v-card flat>
-            <v-card-text>
-
-              <mainTab1></mainTab1>
-
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item id="week-view">
-          <v-card flat>
-            <v-card-text>
-              
-              <mainTab2></mainTab2>
-
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item id="month-view">
-          <v-card flat>
-            <v-card-text>
-
-              <mainTab3></mainTab3>
-
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item id="year-view">
-          <v-card flat>
-            <v-card-text>
-
-              <mainTab4></mainTab4>
-
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-      </v-tabs-items>
-    </div>
+  <div class="container">
+    <v-layout row wrap>
+      <v-flex xs12 style="margin-top: 50px">
+        <v-card>
+          <v-layout row wrap align-center class="app-description">
+            <v-flex xs12 md4 text-xs-center   class="app-title">
+              <h1>{{ appTitle }}</h1>
+            </v-flex>
+            <v-flex xs12 md8 class="app-info">
+              <v-card-text>
+                {{ appDescription }}
+              </v-card-text>
+            </v-flex>
+          </v-layout>
+        </v-card>
+        <v-layout row wrap>
+          <v-flex class="activities-cards" xs12 sm12 md4>
+            <v-card>
+              <v-card-title>
+                <v-select
+                  :items="groups"
+                  v-model="e1"
+                  item-text="groupName"
+                  label="Select"
+                  single-line
+                ></v-select>
+              </v-card-title>
+            </v-card>
+          </v-flex>
+          <v-flex class="activities-cards" xs12 sm6 md4>
+            <v-card>
+              <v-toolbar color="indigo" dark>
+                <v-toolbar-title>Poredak po prijeđenoj udaljenosti</v-toolbar-title>
+              </v-toolbar>
+              <v-list style="padding-top: 1.5em;">
+                <v-list-tile avatar v-for="(user, index) in usersByDistance.slice(0,10)" :key="user.userData.username"> 
+                  <v-list-tile-content>
+                    <v-list-tile-title> <span class="user-username">{{ index + 1 }}. {{ user.userData.username }}</span> <span class="user-distance">{{ (group.locations[0]) ? (user.distance * 2) : user.distance }} m</span> </v-list-tile-title>
+                    <v-list-tile-title> <v-divider></v-divider> </v-list-tile-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list>
+            </v-card>
+          </v-flex>
+          <v-flex class="activities-cards" xs12 sm6 md4>
+            <v-card>
+              <v-toolbar color="indigo" dark>
+                <v-toolbar-title>Poredak po broju {{ (group.locations[0] || group.locations == 'oncreate') ? "dolazaka" : "aktivnosti" }}</v-toolbar-title>
+              </v-toolbar>
+              <v-list style="padding-top: 1.5em;">
+                <v-list-tile avatar v-for="(user, index) in usersByActivityCount.slice(0,10)" :key="user.userData.username"> 
+                  <v-list-tile-content>
+                    <v-list-tile-title> <span class="user-username">{{ index + 1 }}. {{ user.userData.username }}</span> <span class="user-distance">{{ user.activityCount }}</span> </v-list-tile-title>
+                    <v-list-tile-title> <v-divider></v-divider> </v-list-tile-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
 <script>
-import mainTab1 from '~/components/pages/main/mainTab1.vue'
-import mainTab2 from '~/components/pages/main/mainTab2.vue'
-import mainTab3 from '~/components/pages/main/mainTab3.vue'
-import mainTab4 from '~/components/pages/main/mainTab4.vue'
+/* eslint-disable */
+import axios from 'axios'
+import qs from 'qs'
 
 export default {
-  components: {
-    mainTab1,
-    mainTab2,
-    mainTab3,
-    mainTab4
+  middleware: 'username',
+  data () {
+    return {
+      appTitle: "CarLess",
+      appDescription: "Mauris ac suscipit felis. Praesent ornare ex at mauris imperdiet, in facilisis libero dignissim. Suspendisse est nibh, ornare id ullamcorper id, tristique quis odio. Aenean lobortis sollicitudin nisi, sodales laoreet erat sagittis in. Nullam eu elit posuere, mollis sapien pretium, viverra risus. Nulla turpis quam, ultrices sed ultrices et, volutpat eget mi. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris vestibulum efficitur faucibus. Cras vitae nulla a arcu pellentesque faucibus in et tellus. Nam dignissim tempus elementum. In accumsan volutpat tristique. Praesent eu rutrum enim.",
+      e1: null,
+      groups: [],
+      group: {},
+      groupsData: [],
+      groupUsers: [],
+
+      arrangedUsersByDistance: [],
+      arrangedUsersByActivityCount: []
+    }
   },
-  data: () => ({
-    currentItem: 'day-view'
-  })
+
+  created: function () {
+    this.group.locations = 'oncreate';
+    setTimeout(function () {
+      this.initialize();
+    }.bind(this), 200);
+  },
+
+  watch: {
+    e1: function (){
+      var t = this;
+      this.groupsData.forEach(group => {
+        if(group._id == t.e1._id){
+          t.group = group.groupInfo;
+          t.groupUsers = group.users;
+        }
+      });
+    }
+  },
+
+  methods: {
+    initialize () {
+      
+      axios.get(`/api/activities/monthly/all`)
+      .then(response => {
+        this.groupsData = response.data;
+      }).then( data => {
+
+        axios.get(`/api/activity/groups`)
+        .then(response => {
+          var t = this;
+          response.data.forEach(userGroup => {
+            t.groupsData.forEach(userGroupWithActivity => {
+              if(userGroup._id == userGroupWithActivity._id){
+                t.groups.push(userGroup);
+              }
+            });
+          });
+          
+          this.e1 = this.groups[0];
+        })
+        .then(response => {
+          var t = this;
+          t.groupsData.forEach(group => {
+            if(group._id == t.e1._id){
+              t.group = group.groupInfo;
+              t.groupUsers = group.users;
+            }
+          });
+        });
+      });
+
+    }
+  },
+
+  computed: {
+
+    usersByDistance: function() {
+      function compare(a, b) {
+        if (a.distance > b.distance)
+          return -1;
+        if (a.distance < b.distance)
+          return 1;
+        return 0;
+      }
+
+      this.arrangedUsersByDistance = [];
+
+      this.groupUsers.forEach(user => {
+        this.arrangedUsersByDistance.push(user);
+      });
+
+      return this.arrangedUsersByDistance.sort(compare);
+    },
+
+    usersByActivityCount: function() {
+      function compare(a, b) {
+        if (a.activityCount > b.activityCount)
+          return -1;
+        if (a.activityCount < b.activityCount)
+          return 1;
+        return 0;
+      }
+
+      this.arrangedUsersByActivityCount = [];
+
+      this.groupUsers.forEach(user => {
+        this.arrangedUsersByActivityCount.push(user);
+      });
+
+      return this.arrangedUsersByActivityCount.sort(compare);
+    }
+  }
 }
 </script>
 
-<style>
-
-.uppercase{
-  text-transform: uppercase;
+<style scoped>
+.container{
+  margin-top: 50px;
 }
 
-.leaderboard_table{
-  z-index: 0;
-  margin-top: 0px;
+.app-description{
+  min-height: 200px;
 }
 
-.prop-font-size{
-  font-size: 1.5em !important;
+.app-info{
+  padding: 1em;
+  border-left: 2px solid #90A4AE;
 }
 
- @media all and (max-width: 1210px) {
-  .prop-font-size{
-    font-size: 1.2em !important;
-  }
- }
-
- .data-table{
-   margin-top: 2em;
- }
-
-.no_data{
-  height: 100vh;
+.activities-cards{
+  padding-top: 0.5em;
 }
 
-
-
-/* Ranking badges */
-
-  .top-3{
-    margin-top: 1.5em;
-    height: 500px;
-    list-style-type: none;
-  }
-  
-  .top-3 li{
-    height: 33.33%;
-    margin-left: 5%;
-  }
-  
-  .top-3 li > div{
-    display: flex;
-  }
-  
-  .top-3 li > div > span > div > p{
-    margin-left: 1em;
-    margin-top: -1.5em;
-  }
-  
-  .top-3 li > div > span > div > p:nth-of-type(1){
-    margin-right: 1em;
-    font-size: 1em;
-  }
-  
-  .badge {
-    position: relative;
-    margin: 2em;
-    width: 2em;
-    height: 3.1em;
-    border-radius: 5px;
-    display: inline-block;
-    top: 0;
-    transition: all 0.2s ease;
-  }
-  .badge:before,
-  .badge:after {
-    position: absolute;
-    width: inherit;
-    height: inherit;
-    border-radius: inherit;
-    background: inherit;
-    content: "";
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-  }
-  .badge i.position {
-      font-size: 1.3em;
-      padding: 0.4em;
-      font-style: normal;
-      font-weight: bold;
-    }
-  .badge:before {
-    transform: rotate(60deg);
-  }
-  .badge:after {
-    transform: rotate(-60deg);
-  }
-  .badge:hover {
-    top: -4px;
-  }
-  .circle {
-    width: 27.5px;
-    height: 27.5px;
-    position: absolute;
-    background: #fff;
-    z-index: 10;
-    border-radius: 50%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-  }
-  
-  .badge-color-1 {
-    background: linear-gradient(to bottom right, #e6ce6a 0%, #b7892b 100%);
-    color: #b7892b;
-  }
-  .badge-color-2 {
-    background: linear-gradient(to bottom right, #E0E0E0 0%, #BDBDBD 100%);
-    color: #9e9e9e;
-  }
-  .badge-color-3 {
-    background: linear-gradient(to bottom right, #ffc107 0%, #f57c00 100%);
-    color: #f68401;
+@media only screen and (min-width: 600px) {
+  .activities-cards:nth-of-type(1){
+    padding-top: 2em;
   }
 
-@media only screen and (min-width: 220px)  {
-  .top-3{
-    height: 500px;
+  .activities-cards:nth-of-type(2){
+    padding-right: 1em;
   }
 
- .top-3 li{
-    margin-left: 25%;
-  }
-
-  .top-3 li > div > span > div > p{
-    margin-left: 0;
-    margin-top: -0.8em;
-  }
-
-  .top-3 li > div > span > div > p:nth-of-type(1){
-    font-size: 1.1em;
-  }
-
-  .top-3 li > div > span > div > p:nth-of-type(2){
-    font-size: 1.5em;
-  }
-}
-@media only screen and (min-width: 320px)  {
-  .top-3{
-    height: 700px;
-  }
-
- .top-3 li{
-    margin-left: 40%;
-  }
-
-  .top-3 li > div > span > div > p{
-    margin-top: -0.8em;
-  }
-
-  .top-3 li > div > span > div > p:nth-of-type(1){
-    margin-left: -1.3em;
-    font-size: 1.5em;
-  }
-
-  .top-3 li > div > span > div > p:nth-of-type(2){
-    margin-left: -1em;
-    font-size: 2em;
-  }
-  
-  .badge {
-    position: relative;
-    margin: 2em;
-    width: 4em;
-    height: 6.2em;
-    border-radius: 10px;
-    display: inline-block;
-    top: 0;
-    right: 2em;
-    transition: all 0.2s ease;
-  }
-
-  .badge i.position {
-    font-size: 2.6em;
-    padding: 0.4em;
-    font-style: normal;
-    font-weight: bold;
-  }
-
-  .circle {
-    width: 55px;
-    height: 55px;
-    position: absolute;
-    background: #fff;
-    z-index: 10;
-    border-radius: 50%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-  }
-}
-@media only screen and (min-width: 450px)  {
-
-  .top-3{
-    height: 600px;
-  }
-  
- .top-3 li{
-    margin-left: 0%;
-  }
-  
-  .top-3 li > div{
-    display: flex;
-    margin-left: 10%;
-  }
-  
-  .top-3 li > div > span > div{
-    float: left;
-  }
-  
-  .top-3 li > div > span > div > p:nth-of-type(1){
-    margin-top: 1.5em;
-    margin-left: 0;
-  }
-
-  .top-3 li > div > span > div > p:nth-of-type(2){
-    margin-left: 0;
-  }
-
-  .badge {
-    right: 1em;
-  }
-
-}
-@media only screen and (min-width: 700px)  {
-  .top-3{
-    height: 500px;
-  }
-
-  .top-3 li > div{
-    margin-left: 25%;
-  }
-}
-@media only screen and (min-width: 800px)  {
-  .top-3 li > div{
-    margin-left: 30%;
-  }
-}
-@media only screen and (min-width: 960px)  {
-  .top-3{
-    height: 500px;
-    margin-top: 5em;
-  }
-
-  .top-3 li > div{
-    margin-left: 7%;
-  }
-
-  .top-3 li > div > span > div > p:nth-of-type(1){
-    font-size: 1.5em;
-  }
-
-  .top-3 li > div > span > div > p:nth-of-type(2){
-    font-size: 2em;
-  }
-}
-@media only screen and (min-width: 1264px)  {
-
-  .top-3 li > div{
-    margin-top: 1em;
-    margin-left: 20%;
-  }
-
-  .top-3 li > div > span > div > p:nth-of-type(1){
-    font-size: 1.8em;
-  }
-
-  .top-3 li > div > span > div > p:nth-of-type(2){
-    font-size: 2.2em;
-  }
-}
-@media only screen and (min-width: 1600px)  {
-  .top-3 li > div{
-    margin-left: 30%;
+  .activities-cards:nth-of-type(3){
+    padding-left: 1em;
   }
 }
 
-/* Ranking badges end */
-
-@media only screen and (min-width: 960px)  {
-
-  .container{
-    margin-top: 3em;
+@media only screen and (min-width: 960px) {
+  .activities-cards{
+    padding-top: 2em;
   }
+
+  .activities-cards:nth-of-type(1){
+    padding-right: 1em;
+  }
+
+  .activities-cards:nth-of-type(2){
+    padding-right: 1em;
+    padding-left: 1em;
+  }
+
+  .activities-cards:nth-of-type(3){
+    padding-left: 1em;
+  }
+}
+
+.user-username{
+  float: left;
+  margin-left: 1em;
+}
+
+.user-distance{
+  float: right;
+  margin-right: 1em;
 }
 </style>

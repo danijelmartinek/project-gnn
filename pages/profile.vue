@@ -4,7 +4,7 @@
       <v-flex class="profile_body" xs12 sm12 md12 lg12 xl12>
           <div class="cover_image"><div class="cover_image_gradient"></div></div>
       </v-flex>
-      <v-flex class="profile_card" xs10 sm6 md4 lg3 xl2 offset-xs1 offset-sm3 offset-md1 offset-lg1 offset-xl2>
+      <v-flex class="profile_card" md4 lg3 xl2 offset-sm1 offset-md1 offset-lg1 offset-xl2>
         <userCard />
       </v-flex>
     </v-layout>
@@ -15,7 +15,7 @@
 import userCard from '~/components/pages/myProfile/userCard.vue'
 
 export default {
-  middleware: 'auth',
+  middleware: ['auth', 'username'],
   components: {
     userCard
   }
@@ -23,13 +23,6 @@ export default {
 </script>
 
 <style scoped>
-.profile_body{
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
 
 .cover_image {
   position: absolute;

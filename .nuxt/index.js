@@ -13,6 +13,8 @@ import { createStore } from './store.js'
 
 /* Plugins */
 import nuxt_plugin_vuetify_0e1f10d7 from 'nuxt_plugin_vuetify_0e1f10d7' // Source: ../plugins/vuetify
+import nuxt_plugin_googleMaps_294dc8f2 from 'nuxt_plugin_googleMaps_294dc8f2' // Source: ../plugins/googleMaps
+import nuxt_plugin_croppa_71c6e1d0 from 'nuxt_plugin_croppa_71c6e1d0' // Source: ../plugins/croppa
 
 
 // Component: <no-ssr>
@@ -38,10 +40,10 @@ Vue.use(Meta, {
 const defaultTransition = {"name":"page","mode":"out-in","appear":false,"appearClass":"appear","appearActiveClass":"appear-active","appearToClass":"appear-to"}
 
 async function createApp (ssrContext) {
-  const router = createRouter()
+  const router = createRouter(ssrContext)
 
   
-  const store = createStore()
+  const store = createStore(ssrContext)
   // Add this.$router into store actions/mutations
   store.$router = router
   
@@ -152,6 +154,8 @@ async function createApp (ssrContext) {
   // Plugin execution
   
   if (typeof nuxt_plugin_vuetify_0e1f10d7 === 'function') await nuxt_plugin_vuetify_0e1f10d7(app.context, inject)
+  if (typeof nuxt_plugin_googleMaps_294dc8f2 === 'function') await nuxt_plugin_googleMaps_294dc8f2(app.context, inject)
+  if (typeof nuxt_plugin_croppa_71c6e1d0 === 'function') await nuxt_plugin_croppa_71c6e1d0(app.context, inject)
   
 
   // If server-side, wait for async component to be resolved first

@@ -13,20 +13,26 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
+    "@mapbox/polyline": "^1.0.0",
     "axios": "^0.16.2",
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
+    "crypto": "^1.0.1",
     "express": "^4.16.2",
     "express-session": "^1.15.3",
     "moment": "^2.20.1",
-    "mongoose": "^4.10.8",
-    "nuxt": "^1.3.0",
+    "mongoose": "^4.13.12",
+    "multer": "^1.3.0",
+    "nuxt": "^1.4.0",
     "nuxt-oauth": "^0.0.2",
     "passport": "^0.3.2",
     "passport-strava": "latest",
     "qs": "^6.5.1",
     "source-map-support": "^0.4.15",
-    "vuetify": "^1.0.3"
+    "strava-v3": "^1.14.0",
+    "vue-croppa": "^1.3.6",
+    "vue2-google-maps": "^0.9.6",
+    "vuetify": "^1.0.17"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

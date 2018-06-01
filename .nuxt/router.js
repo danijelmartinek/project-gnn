@@ -3,8 +3,12 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const _3f28326a = () => import('../pages/profile.vue' /* webpackChunkName: "pages/profile" */).then(m => m.default || m)
+const _22d31aa4 = () => import('../pages/username.vue' /* webpackChunkName: "pages/username" */).then(m => m.default || m)
+const _0a1a640c = () => import('../pages/rank.vue' /* webpackChunkName: "pages/rank" */).then(m => m.default || m)
+const _25cca70b = () => import('../pages/login.vue' /* webpackChunkName: "pages/login" */).then(m => m.default || m)
 const _e4d7501e = () => import('../pages/admin.vue' /* webpackChunkName: "pages/admin" */).then(m => m.default || m)
+const _3f28326a = () => import('../pages/profile.vue' /* webpackChunkName: "pages/profile" */).then(m => m.default || m)
+const _fe17dc1e = () => import('../pages/register.vue' /* webpackChunkName: "pages/register" */).then(m => m.default || m)
 const _5c2503f4 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 
 
@@ -36,9 +40,20 @@ const scrollBehavior = function (to, from, savedPosition) {
     window.$nuxt.$once('triggerScroll', () => {
       // coords will be used if no selector is provided,
       // or if the selector didn't match any element.
-      if (to.hash && document.querySelector(to.hash)) {
-        // scroll to anchor by returning the selector
-        position = { selector: to.hash }
+      if (to.hash) {
+        let hash = to.hash
+        // CSS.escape() is not supported with IE and Edge.
+        if (typeof window.CSS !== 'undefined' && typeof window.CSS.escape !== 'undefined') {
+          hash = '#' + window.CSS.escape(hash.substr(1))
+        }
+        try {
+          if (document.querySelector(hash)) {
+            // scroll to anchor by returning the selector
+            position = { selector: hash }
+          }
+        } catch (e) {
+          console.warn('Failed to save scroll position. Please add CSS.escape() polyfill (https://github.com/mathiasbynens/CSS.escape).')
+        }
       }
       resolve(position)
     })
@@ -55,14 +70,34 @@ export function createRouter () {
     scrollBehavior,
     routes: [
 		{
-			path: "/profile",
-			component: _3f28326a,
-			name: "profile"
+			path: "/username",
+			component: _22d31aa4,
+			name: "username"
+		},
+		{
+			path: "/rank",
+			component: _0a1a640c,
+			name: "rank"
+		},
+		{
+			path: "/login",
+			component: _25cca70b,
+			name: "login"
 		},
 		{
 			path: "/admin",
 			component: _e4d7501e,
 			name: "admin"
+		},
+		{
+			path: "/profile",
+			component: _3f28326a,
+			name: "profile"
+		},
+		{
+			path: "/register",
+			component: _fe17dc1e,
+			name: "register"
 		},
 		{
 			path: "/",
