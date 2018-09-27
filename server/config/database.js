@@ -1,3 +1,3 @@
 module.exports = {
-    'url' : 'mongodb://localhost/carlessDB'
+    'url' : 'mongodb://localhost/{DB_name}'
 }

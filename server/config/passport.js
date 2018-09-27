@@ -60,12 +60,3 @@ module.exports = function(passport){
 		});
   }));
 }
-
-// STRAVA WEBHOOK
-// curl -X POST https://api.strava.com/api/v3/push_subscriptions \
-// -F client_id=24180 \
-// -F client_secret=d03c440b12e127955225e74d2b24dadf2e2b0cd2 \
-// -F 'callback_url=http://51.15.91.12:81/webhook/strava/strava_callback' \
-// -F 'verify_token=STRAVA'
-
-// {"id":124442,"resource_state":2,"application_id":24180,"callback_url":"http://51.15.91.12:81/webhook/strava/strava_callback","created_at":"2018-05-21T11:21:25.277616513Z","updated_at":"2018-05-21T11:21:25.277613623Z"}

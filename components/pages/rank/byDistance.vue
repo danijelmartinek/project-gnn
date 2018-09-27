@@ -15,7 +15,7 @@
                   <p>
                     <strong>{{first3.userData.username}}</strong>
                   </p>
-                  <p v-if="$store.state.userGroup">{{ ($store.state.userGroup.locations[0]) ? first3.distance * 2 : first3.distance }} m</p>
+                  <p v-if="$store.state.userGroup">{{ ($store.state.userGroup.locations[0]) ? first3.distance.toFixed(0) * 2 : first3.distance.toFixed(0) }} m</p>
                 </div>
                 </span>
               </div>
@@ -49,7 +49,7 @@
                 <template slot="items" slot-scope="props">
                   <td class="text-xs-center title">{{ props.item.rank }}.</td>
                   <td class="text-xs-center prop-font-size">{{props.item.userData.username}}</td>
-                  <td class="text-xs-center prop-font-size" v-if="$store.state.userGroup">{{ ($store.state.userGroup.locations[0]) ? props.item.distance * 2 : props.item.distance }} m</td>
+                  <td class="text-xs-center prop-font-size" v-if="$store.state.userGroup">{{ ($store.state.userGroup.locations[0]) ? props.item.distance.toFixed(0) * 2 : props.item.distance.toFixed(0) }} m</td>
                 </template>
                 <v-alert slot="no-results" :value="true" color="error" icon="warning">
                   Tražili ste "{{ search }}" - nema rezultata.

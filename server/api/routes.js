@@ -253,35 +253,36 @@ server.post('/webhook/strava/strava_callback', function(req, res) {
 
       if(!activity){
         strava.activities.get({id: req.body.object_id, 'access_token': stravaConfig.access_token}, function(err, data){
+          if(data.manual == false){
+            var edgePoints = polylineEdgePoints.positionPointsFromPolyline(data.map.polyline);
 
-          var edgePoints = polylineEdgePoints.positionPointsFromPolyline(data.map.polyline);
+            var newActivity = new Activity({
+              stravaId: data.id,
+              userId: mongoose.Types.ObjectId(userId),
+              title: data.name,
+              type: data.type,
+              distance: data.distance, // in meters
+              duration: data.elapsed_time, // in sec
+              endTime: endTime(data.start_date, data.elapsed_time),
+              startPoint: edgePoints.startPoint,
+              endPoint: edgePoints.endPoint,
+              map: {
+                id: data.map.id,
+                polyline: data.map.polyline,
+                summaryPolyline: data.map.summary_polyline
+              },
+              created_at: data.start_date, // ISO format
+              updated_at: data.start_date // ISO format
 
-          var newActivity = new Activity({
-            stravaId: data.id,
-            userId: mongoose.Types.ObjectId(userId),
-            title: data.name,
-            type: data.type,
-            distance: data.distance, // in meters
-            duration: data.elapsed_time, // in sec
-            endTime: endTime(data.start_date, data.elapsed_time),
-            startPoint: edgePoints.startPoint,
-            endPoint: edgePoints.endPoint,
-            map: {
-              id: data.map.id,
-              polyline: data.map.polyline,
-              summaryPolyline: data.map.summary_polyline
-            },
-            created_at: data.start_date, // ISO format
-            updated_at: data.start_date // ISO format
+            });
 
-          });
-
-          newActivity.save(function(err){
-            if(err){
-              console.log("ERROR - can't save activity to database!");
-              throw err;
-            }
-          });
+            newActivity.save(function(err){
+              if(err){
+                console.log("ERROR - can't save activity to database!");
+                throw err;
+              }
+            });
+          }
 
         });
       }
@@ -291,117 +292,13 @@ server.post('/webhook/strava/strava_callback', function(req, res) {
 })
 
 
-server.get('/log/group', function(req, res) {
-
-  var newGroup = new ActivityGroup({
-    adminMail: "danijel.m.js@gmail.com",
-    groupName: "Test grupa",
-    private: false,
-    groupDescription: "Grupa za testiranje CarLess aplikacije",
-    locations: [],
-    timeBox: [],
-    maxDistance: 400,
-    created_at: Date.now(),
-    updated_at: Date.now()
-
-  });
-
-  newGroup.save(function(err){
-    if(err){
-      console.log("ERROR - can't save group to database!");
-      throw err;
-    }
-  });
-});
-
-
-
-// server.get('/api/useractivities', function (req, res) {
-//   console.log("Hoce?");
-
-//   strava.athlete.listActivities({'access_token':'cf9be88f3d1b6c3ebba37445b43345f14f530915'}, function(err, data){
-//     console.log(data)
-//   })
-// });
-
-// server.get('/api/polyline', function (req, res) {
-// var polyline = "{g{wGus}cBMOFg@AS@SDI?[IW@{AFWNSG[BUIUAi@B]Qo@UWc@W[Uo@[g@Sg@a@uBiAo@KM@u@ED@I?GCCkAKMBs@Re@A_@I]@WPK?GLSGGU?KEAIBFOEFBIDOOG?EEJJ`@HGAFJZDAQ?_@BOA[MMAg@Gi@@]Ik@Cg@GW?YDWIy@@UEy@@KFETFBDBL@p@HZOBDD";
-
-
-// console.log(object);
-// })
-
-
-// server.get('/api/logactivity', function (req, res) {
-
-//   req.body.object_id = '1183905954';
-
-//   Activity.findOne({stravaId: req.body.object_id}, function(err, activity) {
-//     if (err) console.log("ERROR - can't find activity in database!");
-
-//     if(!activity){
-//       strava.activities.get({id: req.body.object_id, 'access_token':'cf9be88f3d1b6c3ebba37445b43345f14f530915'}, function(err, data){
-
-//         var edgePoints = polylineEdgePoints.positionPointsFromPolyline(data.map.polyline);
-//         console.log(data);
-//         var newActivity = new Activity({
-//           stravaId:  data.id,
-//           userId: mongoose.Types.ObjectId("59ee08edfc6a6c101ba66fca"),
-//           type: data.type,
-//           distance: data.distance, // in meters
-//           duration: data.elapsed_time, // in sec
-//           endTime: endTime(data.start_date, data.elapsed_time),
-//           startPoint: edgePoints.startPoint,
-//           endPoint: edgePoints.endPoint,
-//           map: {
-//             id: data.map.id,
-//             polyline: data.map.polyline,
-//             summaryPolyline: data.map.summary_polyline
-//           },
-//           created_at: data.start_date, // ISO format
-//           updated_at: data.start_date // ISO format
-
-//         });
-
-//         newActivity.save(function(err){
-//           if(err){
-//             console.log("ERROR - can't save activity to database!");
-//             throw err;
-//           }
-//         });
-
-//       });
-//     }
-
-//   })
-
-// });
-
-
-  // server.get('/api/carlessDB/logactivity1', function (req, res) {
-  //   console.log("Activity saved to database.");
-  //       var newActivity = new Activity();
-  //       newActivity.userId = '5a9534ab137aae52ecd2fdc9';
-  //       newActivity.type = "Ride";
-  //       newActivity.distance = 4250;
-  //       newActivity.created_at = new Date();
-        
-  //       newActivity.save((err) => {
-  //         if(err)
-  //           throw err;
-  //       });	
-  // });
-
-
-  // require('./activities/dailyLog.js')(server, User, Activity, ActivityGroup);
-
-  // require('./activities/weeklyLog.js')(server, User, Activity, ActivityGroup);
-  
-  // require('./activities/monthlyLog.js')(server, User, Activity, ActivityGroup);
-
-  // require('./activities/yearlyLog.js')(server, User, Activity, ActivityGroup);
+// STRAVA WEBHOOK
+// curl -X POST https://api.strava.com/api/v3/push_subscriptions \
+// -F client_id={Strava_app_id} \
+// -F client_secret={Strava_app_secret} \
+// -F 'callback_url=http://{domain}/webhook/strava/strava_callback' \
+// -F 'verify_token=STRAVA'
 
 
   require('./activities/activities.js')(server, User, Activity, ActivityGroup);
-
 }

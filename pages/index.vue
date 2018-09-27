@@ -36,7 +36,7 @@
               <v-list style="padding-top: 1.5em;">
                 <v-list-tile avatar v-for="(user, index) in usersByDistance.slice(0,10)" :key="user.userData.username"> 
                   <v-list-tile-content>
-                    <v-list-tile-title> <span class="user-username">{{ index + 1 }}. {{ user.userData.username }}</span> <span class="user-distance">{{ (group.locations[0]) ? (user.distance * 2) : user.distance }} m</span> </v-list-tile-title>
+                    <v-list-tile-title> <span class="user-username">{{ index + 1 }}. {{ user.userData.username }}</span> <span class="user-distance">{{ (group.locations[0]) ? (user.distance.toFixed(0) * 2) : user.distance.toFixed(0) }} m</span> </v-list-tile-title>
                     <v-list-tile-title> <v-divider></v-divider> </v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
